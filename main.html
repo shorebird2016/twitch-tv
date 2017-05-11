@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title>Twitch TV Project (Freecodecamp)</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+    <link rel="stylesheet" href="lib/style4.css">
+    <link rel="stylesheet" href="lib/search.css">
+    <style>
+        body { display: flex; flex-direction: column; background-image: url("image/main-bkgnd.jpg"); background-size: cover;
+            background-repeat: no-repeat;  font-family: "Comic Sans MS"; }
+        h3 { color: yellow; }
+        /*container for channel selector*/
+        .channel-selector { display: flex; justify-content: space-between; }
+        .channel-container { display: flex; flex-wrap: wrap; justify-content: space-between; padding: 20px; }
+        .channel-box { flex: 1; display: flex; flex-direction: column; margin: auto; padding-bottom: 20px; }
+        .channel-box a { flex: 1; margin: auto; }
+
+        /*for legend, logo, banner*/
+        .banner-style { width: 450px; height: 270px; }
+        .legend-style { color: lightgoldenrodyellow; text-align: center; font-size: larger; }
+        .logo-style { width: 30px; height: 30px; border-radius: 20px; cursor: pointer; }
+        .preview-style { width: 100px; height: 50px; position: absolute; right: 5px; top: 5px; }
+
+        /*animation*/
+        /*.banner-style:hover { transform: scale(1.2, 1.2) translateZ(20px); }*/
+        .logo-style:hover { transform: scale(8, 8); }
+        .preview-style:hover { transform: scale(8, 8) }
+        @keyframes neon-sign {/*change color like neon light sign*/
+            0% { color: lightsalmon; left: 0; top: 0; }
+            25% { color: cornsilk; left: 10px; top: 0; }
+            50% { color: lightgreen; left: 25px; top: 0; }
+            75% { color: lightblue; left: 50px; top: 0; }
+            100% { color: white; left: 0px; top: 0; }
+        }
+        h1 { animation: neon-sign 20s linear 10s infinite; }
+
+        /*debug*/
+        /*.debug { border: 1px red solid; }*/
+    </style>
+</head>
+<body ng-controller="myCtrl as CTRL">
+    <h1 style="text-align: center; color: white; font-size: 300%;">What's Streaming on Twitch ?</h1>
+    <div class="channel-selector">
+        <a href="#" class="a_demo_four"ng-click="CTRL.getLiveStreams()""
+            >Show LIVE Channels</a>
+        <!--<div class="search-style">-->
+            <!--<input type="text" placeholder="search pattern" ng-model="CTRL.searchKeyword" class="search-field-style">-->
+            <!--<button ng-click="CTRL.getChannelList()" class="search-field-style">Search</button>-->
+        <!--</div>-->
+        <form class="form-wrapper">
+            <input type="text" placeholder="Search for..." required ng-model="CTRL.searchKeyword" id="search">
+            <button ng-click="CTRL.getChannelList()" id="submit">Go</button>
+            <!--<input type="submit" value="go" id="submit">-->
+        </form>
+    </div>
+
+    <div class="channel-container">
+        <div class="channel-box debug" ng-repeat="BOX in CTRL.channels">
+            <a href="{{BOX.url}}" target="_blank" class="debug" style="position: relative;">
+                <img ng-src="{{CTRL.getVideoBannerUrl($index)}}" class="banner-style">
+                <img ng-src="{{CTRL.liveStreams[$index].preview.medium}}" class="preview-style">
+            </a>
+            <span class="legend-style">
+                <a href="{{CTRL.getLogoUrl($index)}}" data-lightbox="member">
+                <img ng-src="{{CTRL.getLogoUrl($index)}}" class="logo-style"
+                     ng-click="CTRL.getChannelInfo($index)">
+                </a>
+                    {{BOX.display_name}}
+                ( <i class="fa fa-users"> {{BOX.followers | number}}</i>
+                  <i class="fa fa-eye"> {{BOX.views | number}}</i> )
+            </span>
+        </div>
+    </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.3/angular.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+<script src="lib/lightbox.js"></script>
+<script src="main.js"></script>
+</body>
+</html>
